@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Account</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/0c94976b43.js" crossorigin="anonymous"></script>
+</head>
+<body  class="w-[full] h-[100dvh] flex flex-col justify-center items-center">
+    <header class="basis-[30%]">
+        <h1 class="text-green-400 font-semibold text-[2.5rem]">Add Account</h1>
+    </header>
+    <main class="flex flex-col basis-[70%]">
+        <div class=" flex flex-col items-center basis-[50%]">
+        <h1 id="accountlist_empty" class="text-gray-400 font-normal">Account list is empty.</h1>
+        <ul id="listView">
+            <li class="flex flex-row items-center">
+                <h1 class="font-semibold text-[1.5rem]">Chequing Account</h1>
+                <h1 class="ml-3 text-green-400 font-semibold text-[1.5rem]">40%</h1>
+            </li>
+        </ul>
+        </div>
+        <div class="basis-[50%] flex flex-col items-center w-[100dvw] p-4">
+            <input id="account_name" type="text" placeholder="Enter Account Name" class="w-[80%] border rounded-lg p-[0.5rem] outline-none mb-[1rem]">
+            <input id="account_percent" type="number" placeholder="Enter Percent Amount for this Account" class="w-[80%] border rounded-lg p-[0.5rem] outline-none">
+            <button id="add_btn" class="mt-[1rem] w-[60%] bg-green-400 p-[0.5rem] font-semibold rounded-lg transition-all duration-300 hover:bg-green-600 text-white p-3 rounded-md">Add</button>
+        </div>
+    </main>
+</body>
+<script>
+    const listView = document.getElementById('listView');
+    const listempty = document.getElementById('accountlist_empty');
+    const add_btn = document.getElementById('add_btn');
+      let items = JSON.parse(localStorage.getItem("accountlist")) || [];
+    console.log(JSON.stringify(items))
+
+    const account_name = document.getElementById('account_name');
+    const account_perc = document.getElementById('account_percent');
+
+    function Getlist(){
+        if(!items){
+           listView.style.display = 'block';
+           listempty.style.display = 'none';
+        } else {
+           listView.style.display = 'block';
+           listempty.style.display = 'none';
+
+           listView.innerHTML= "";
+
+           items.forEach((item) => {
+            const li = document.createElement("li");
+
+            li.textContent = item;
+           });
+        }
+    }
+
+
+    add_btn.addEventListener('click',() => {
+
+        if (account_name.value && account_perc.value) {
+        listView.style.display = 'block';
+        const newItem = document.createElement('li');
+
+        newItem.innerHTML = `
+        <h1 class="font-semibold text-[1.5rem]">${account_name.value}</h1>
+        <h1 class="ml-3 text-green-400 font-semibold text-[1.5rem]">${account_perc.value}%</h1>
+        `
+        newItem.className = "flex flex-row items-center";
+
+        listView.appendChild(newItem);
+        items.push(newItem);
+
+        localStorage.setItem("accountlist", JSON.stringify(items));
+        console.log(JSON.parse(localStorage.getItem("accountlist")));
+    } else {
+            alert('One of the values are empty.')
+        }
+    })
+
+/* console.log(JSON.parse(localStorage.getItem("accountlist"))); */
+Getlist();
+</script>
+</html>
